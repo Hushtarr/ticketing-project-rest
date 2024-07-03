@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 @RestController
@@ -21,6 +22,7 @@ public class TaskController {
     }
 
     @GetMapping
+    @RolesAllowed({"Manager"})
     public ResponseEntity<ResponseWrapper>getTasks(){
         List<TaskDTO>taskDTOList=taskService.listAllTasks();
         return ResponseEntity
@@ -34,6 +36,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
+    @RolesAllowed({"Manager"})
     public ResponseEntity<ResponseWrapper>getTasksById(@PathVariable Long id){
         TaskDTO taskDTO=taskService.findById(id);
         return ResponseEntity
@@ -48,6 +51,7 @@ public class TaskController {
     }
 
     @PostMapping
+    @RolesAllowed({"Manager"})
     public ResponseEntity<ResponseWrapper>creatTasks(@RequestBody TaskDTO taskDTO){
         taskService.save(taskDTO);
         return ResponseEntity
@@ -61,6 +65,7 @@ public class TaskController {
     }
 
     @PutMapping
+    @RolesAllowed({"Manager"})
     public ResponseEntity<ResponseWrapper>updateTasks(@RequestBody TaskDTO taskDTO){
         taskService.update(taskDTO);
         return ResponseEntity
@@ -73,6 +78,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
+    @RolesAllowed({"Manager"})
     public ResponseEntity<ResponseWrapper>deleteTasks(@PathVariable Long id){
         taskService.delete(id);
         return ResponseEntity
@@ -85,6 +91,7 @@ public class TaskController {
     }
 
     @GetMapping("/employee/pending-tasks")
+    @RolesAllowed({"Employee"})
     public ResponseEntity<ResponseWrapper>employeePendingTasks(){
         List<TaskDTO>taskDTOList=taskService.listAllTasksByStatusIsNot(Status.COMPLETE);
         return ResponseEntity
@@ -98,6 +105,7 @@ public class TaskController {
     }
 
     @PutMapping("/employee/update")
+    @RolesAllowed({"Employee"})
     public ResponseEntity<ResponseWrapper>employeeUpdateTasks(@RequestBody TaskDTO taskDTO){
         taskService.update(taskDTO);
         return ResponseEntity
@@ -110,6 +118,7 @@ public class TaskController {
     }
 
     @GetMapping("/employee/archive")
+    @RolesAllowed({"Employee"})
     public ResponseEntity<ResponseWrapper>employeeArchiveTasks(){
         List<TaskDTO>taskDTOList=taskService.listAllTasksByStatus(Status.COMPLETE);
         return ResponseEntity
